@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
@@ -11,7 +10,26 @@ import Typography from '@mui/material/Typography';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Rating from '@mui/material/Rating';
-import { RatingWrap } from './Products.styled';
+import Tooltip from '@mui/material/Tooltip';
+import { RatingWrap, StyledCard } from './Products.styled';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Mousewheel, Keyboard } from "swiper";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { IProducts } from '../../types';
+import { useAddToCartMutation } from '../../features/ecomm/storeApi';
+
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 
 const labels: { [index: string]: string } = {
   1: 'Useless+',
@@ -21,57 +39,80 @@ const labels: { [index: string]: string } = {
   5: 'Excellent+',
 };
 
-export default function ProductItem() {
-  const [expanded, setExpanded] = useState(false);
-	const a = {
-		"id": 1,
-		"title": "iPhone 9",
-		"description": "An apple mobile which is nothing like apple",
-		"price": 549,
-		"discountPercentage": 12.96,
-		"rating": 4.69,
-		"stock": 94,
-		"brand": "Apple",
-		"category": "smartphones",
-		"thumbnail": "https://dummyjson.com/image/i/products/1/thumbnail.jpg",
-		"images": [
-			"https://dummyjson.com/image/i/products/1/1.jpg",
-			"https://dummyjson.com/image/i/products/1/2.jpg",
-			"https://dummyjson.com/image/i/products/1/3.jpg",
-			"https://dummyjson.com/image/i/products/1/4.jpg",
-			"https://dummyjson.com/image/i/products/1/thumbnail.jpg"
-		]
-	}
+export const ProductItem: React.FC<IProducts> = (item) => {
+
+
+	const [addItem, {}] = useAddToCartMutation();
+	const [expanded, setExpanded] = useState<boolean>(false);
+	const [isAdded, setIsAdded] = useState<boolean>(false);
+
+	const {
+		id, title, description, price, rating, category, images
+	} = item;
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+	const handleAddItem = (): void => {
+		addItem({
+			isAdded: true,
+			amount: 1,
+			...item,
+		}).unwrap();
+
+		setIsAdded(true);
+	}
+
   return (
 		<Grid item xs={10} sm={6} md={4} xl={3}>
- 			<Card sx={{ width: '100%' }} color='primary'>
-				<CardHeader
-					title={a.title}
-					subheader={`${a.price}$`}	/>
-				<CardMedia
-					component="img"
-					height="190"
-					image={a.thumbnail}
-					alt={a.title}
-				/>
+ 			<StyledCard >
+				<CardHeader	title={title} subheader={`${price}$`}	/>
+				<Swiper
+					cssMode={true}
+					navigation={true}
+					pagination={true}
+					mousewheel={true}
+					keyboard={true}
+					modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+					className="mySwiper"
+				>
+					{
+						images.map((i: string, idx: number) => (
+							<SwiperSlide key={idx}>
+								<CardMedia
+									component="img"
+									height="190"
+									image={i}
+									alt='item image'
+								/>
+							</SwiperSlide>
+						))
+					}
+					
+				</Swiper>
+
+
 				<CardContent>
 					<RatingWrap>
-						<Rating name="item-rating" value={a.rating} readOnly />
+						<Rating name="item-rating" value={rating} readOnly />
 						<Typography 
 							variant='body2'
 							component='span'>
-							{ labels[Math.ceil(a.rating)] }
+							{ labels[Math.ceil(rating)] }
 						</Typography>
 					</RatingWrap>
 				</CardContent>
 				<CardActions disableSpacing sx={{justifyContent: 'space-between'}}>
-					<IconButton aria-label="add to favorites">
-						<AddShoppingCartIcon fontSize='large' />
-					</IconButton>
+
+					<Tooltip title={ isAdded ? 'This Item Has Already Added!' : 'Add To Cart!'}>
+						<IconButton
+							onClick={handleAddItem}
+							aria-label="add to favorites">
+							<AddShoppingCartIcon fontSize='large' />
+						</IconButton>
+					</Tooltip>
+
 					<IconButton
 						sx={{
 							transform: !expanded ? 'rotate(0deg)' : 'rotate(180deg)',
@@ -87,15 +128,27 @@ export default function ProductItem() {
 				<Collapse in={expanded} timeout="auto" unmountOnExit>
 					<CardContent>
 						<Typography paragraph>
-							Category: { a.category.toUpperCase() }
+							Category: { category.toUpperCase() }
 						</Typography>
 						<Typography paragraph>
-							{ a.description }
+							{ description }
 						</Typography>
 					</CardContent>
 				</Collapse>
-			</Card>
+			</StyledCard>
+
+			<Snackbar open={isAdded} autoHideDuration={4000} onClose={() => setIsAdded(false)}>
+				<Alert
+					severity="success"
+					sx={{minWidth: '200px', textTransform: 'capitalize'}} 
+					onClose={() => setIsAdded(false)} >
+					item has been added in your cart!
+				</Alert>
+      </Snackbar>
 		</Grid>
    
   );
 }
+
+
+export default ProductItem;

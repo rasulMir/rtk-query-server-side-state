@@ -567,62 +567,6 @@
       "email": "2@mail.com",
       "name": "rasul2",
       "password": "12345"
-    },
-    {
-      "id": "messi",
-      "name": "messi",
-      "email": "rasulmyrzakulov52@gmail.com",
-      "password": "12345",
-      "chbx": false
-    },
-    {
-      "id": "zhenya",
-      "name": "zhenya",
-      "email": "2@mail.com",
-      "password": "54321",
-      "chbx": false
-    },
-    {
-      "id": "leonel",
-      "name": "leonel",
-      "email": "aaa@gmail.com",
-      "password": "12345",
-      "chbx": false
-    },
-    {
-      "id": "aynura",
-      "name": "aynura",
-      "email": "1@gmail.com",
-      "password": "12345",
-      "chbx": true
-    },
-    {
-      "id": "qwerty",
-      "name": "qwerty",
-      "email": "qw@mail.com",
-      "password": "12345",
-      "chbx": false
-    },
-    {
-      "id": "asadulla",
-      "name": "asadulla",
-      "email": "12@mail.com",
-      "password": "12345",
-      "chbx": false
-    },
-    {
-      "id": "RASUL",
-      "name": "RASUL",
-      "email": "rasulmyrzakulov52@gmail.com",
-      "password": "12345",
-      "chbx": false
-    },
-    {
-      "id": "rasul3",
-      "name": "rasul3",
-      "email": "aaa@gmail.com",
-      "password": "8XSqNceZa76SYup",
-      "chbx": false
     }
   ],
   "currentUser": {

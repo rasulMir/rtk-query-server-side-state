@@ -4,19 +4,29 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-interface Props {}
+interface Props {
+	onchange: (txt: string) => void
+}
 
-export default function Filter({}: Props) {
+const categories: string[] = [
+	"smartphones",
+	"laptops",
+	"fragrances",
+	"skincare",
+	"groceries",
+	"home-decoration",
+];
+
+export default function Filter({ onchange }: Props) {
 
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-
-
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (txt: string) => {
+		onchange(txt);
     setAnchorEl(null);
   };
 
@@ -40,9 +50,16 @@ export default function Filter({}: Props) {
           'aria-labelledby': 'filter',
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+				{
+					categories.map((i, idx) => (
+						<MenuItem key={idx}
+							onClick={() => handleClose(`?category=${i}`)}
+							 sx={{textTransform: 'capitalize'}} >
+								{i}
+						</MenuItem>
+					))
+				}
+        
       </Menu>
     </div>
   );

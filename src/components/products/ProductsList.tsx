@@ -1,35 +1,31 @@
-import { Container, Grid, ThemeProvider } from '@mui/material';
-import ProductItem from './ProductItem';
+import { Container, Grid } from '@mui/material';
 import React from 'react';
-import { createTheme } from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
+import { IProducts } from '../../types';
+import ProductItem from './ProductItem';
+import CircularProgress from '@mui/material/CircularProgress';
 
-const theme = createTheme({
-	palette: {
-		primary: {
-			main: grey[400],
-		},
-	}
-});
+interface Props {
+	data: IProducts[] | undefined,
+	isLoading: boolean,
+};
 
-interface Props {};
+export default function ProductsList({ data, isLoading }: Props) {
 
-export default function ProductsList({}: Props) {
+
+	
+
 	return (
-		<Container maxWidth='md'>
-			<ThemeProvider theme={theme}>
-				<Grid 
-					justifyContent="center"
-					container
-					spacing={2}>
-
-					<ProductItem />
-					<ProductItem />
-					<ProductItem />
-					<ProductItem />
-
-				</Grid>
-			</ThemeProvider>
+		<Container maxWidth='md' sx={{ pt: '30px', pb: '30px' }}>
+			<Grid 
+				justifyContent="center"
+				container
+				spacing={2}>
+				{
+					isLoading ? (<CircularProgress />) : 
+						(data && data.map(i => <ProductItem key={i.id} {...i} /> ))
+				}
+				
+			</Grid>
 		</Container>
 	);
 };

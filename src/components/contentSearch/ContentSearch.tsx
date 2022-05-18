@@ -3,15 +3,17 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Search, SearchIconWrapper, StyledInputBase, StyledForm } from './ContentSearch.styled';
 import IconButton from '@mui/material/IconButton';
 
-interface Props {};
+interface Props {
+	onsubmit: (txt: string) => void,
+};
 
-export default function ContentSearch({}: Props) {
+export default function ContentSearch({ onsubmit }: Props) {
 
 	const [ txt, setTxt ] = useState<string>('');
 
 	const handleSubmit = (e: React.FormEvent): void => {
 		e.preventDefault();
-		console.log(txt);
+		onsubmit(`?q=${txt.trim().toLowerCase()}`);
 	};
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -27,7 +29,7 @@ export default function ContentSearch({}: Props) {
 				<StyledInputBase
 					value={txt}
 					onChange={handleChange}
-					placeholder="Search…"
+					placeholder="Search By Title…"
 					inputProps={{ 'aria-label': 'search' }}
 				/>
 			</Search>

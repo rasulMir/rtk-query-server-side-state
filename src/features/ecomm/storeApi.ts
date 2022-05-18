@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { IFormInputs, IUser } from '../../types';
+import type { ICartItem, IProducts, IUser } from '../../types';
 
 export const storeApi = createApi({
   reducerPath: 'storeApi',
-	tagTypes: ['Users', 'Cart', 'Orders', 'Current'],
+	tagTypes: ['Users', 'Cart', 'Orders', 'Current', 'Products'],
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3001/' }),
   endpoints: (builder) => ({
     getUAllsers: builder.query<IUser[], void>({
@@ -16,6 +16,38 @@ export const storeApi = createApi({
             ]
           : [{ type: 'Users' }],
     }),
+
+		getProducts: builder.query<IProducts[], string>({
+			query: (item) => `products/${item}`,
+			providesTags: (result) =>
+        result
+          ? [
+              ...result.map(() => ({ type: 'Products' as const})),
+              { type: 'Products'},
+            ]
+          : [{ type: 'Products' }],
+		}),
+
+		getOrders: builder.query<IProducts[], void>({
+			query: () => 'orders/',
+			providesTags: (result) =>
+        result
+          ? [
+              ...result.map(() => ({ type: 'Orders' as const})),
+              { type: 'Orders'},
+            ]
+          : [{ type: 'Orders' }],
+		}),
+
+		addToCart: builder.mutation<ICartItem[], ICartItem>({
+			query: (item) => ({
+				url: 'orders/',
+				method: 'POST',
+				body: item
+			}),
+			transformResponse: (response: { data: ICartItem[] }, meta, arg) => response.data,
+      invalidatesTags: ['Orders', 'Products'],
+		}),
 
 		addNewUser: builder.mutation<IUser, IUser>({
 			query: (user) => ({
@@ -41,4 +73,5 @@ export const storeApi = createApi({
   }),
 });
 
-export const { useGetUAllsersQuery, useAddNewUserMutation, useAddCurrentUserMutation } = storeApi;
+export const { useGetUAllsersQuery, useAddNewUserMutation, useAddCurrentUserMutation, useGetProductsQuery, useAddToCartMutation,
+useGetOrdersQuery } = storeApi;
