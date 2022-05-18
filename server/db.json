@@ -623,20 +623,6 @@
       "email": "aaa@gmail.com",
       "password": "8XSqNceZa76SYup",
       "chbx": false
-    },
-    {
-      "id": "zxxxx",
-      "name": "zxxxx",
-      "email": "aaa@gmail.com",
-      "password": "8XSqNceZa76SYup",
-      "chbx": false
-    },
-    {
-      "id": "rasulaaaaaaaaa",
-      "name": "rasulaaaaaaaaa",
-      "email": "aaa@gmail.com",
-      "password": "8XSqNceZa76SYup",
-      "chbx": false
     }
   ],
   "currentUser": {
@@ -648,5 +634,5 @@
       "chbx": false
     }
   },
-  "order": []
+  "orders": []
 }
