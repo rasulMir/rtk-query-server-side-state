@@ -11,9 +11,6 @@ interface Props {
 
 export default function ProductsList({ data, isLoading }: Props) {
 
-
-	
-
 	return (
 		<Container maxWidth='md' sx={{ pt: '30px', pb: '30px' }}>
 			<Grid 
@@ -21,7 +18,7 @@ export default function ProductsList({ data, isLoading }: Props) {
 				container
 				spacing={2}>
 				{
-					isLoading ? (<CircularProgress />) : 
+					!isLoading ? (<CircularProgress />) : 
 						(data && data.map(i => <ProductItem key={i.id} {...i} /> ))
 				}
 				

@@ -16,11 +16,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Mousewheel, Keyboard } from "swiper";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import SignAlert from '../signAlert/SignAlert';
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { IProducts } from '../../types';
-import { useAddToCartMutation } from '../../features/ecomm/storeApi';
+import { useAddToCartMutation, useGetCurrentUserQuery } from '../../features/ecomm/storeApi';
 
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -41,13 +42,16 @@ const labels: { [index: string]: string } = {
 
 export const ProductItem: React.FC<IProducts> = (item) => {
 
-
 	const [addItem, {}] = useAddToCartMutation();
+	const { data } = useGetCurrentUserQuery();
 	const [expanded, setExpanded] = useState<boolean>(false);
-	const [isAdded, setIsAdded] = useState<boolean>(false);
+	const [added, setAdded] = useState<boolean>(false);
+	const [notAdded, setNotAdded] = useState<boolean>(false);
+	const [disabled, setDisabled] = useState<boolean>(false);
+	const [isUser, setIsUser] = useState<boolean>(false);
 
 	const {
-		id, title, description, price, rating, category, images
+		id, title, description, price, rating, category, images,
 	} = item;
 
   const handleExpandClick = () => {
@@ -55,19 +59,29 @@ export const ProductItem: React.FC<IProducts> = (item) => {
   };
 
 	const handleAddItem = (): void => {
-		addItem({
-			isAdded: true,
-			amount: 1,
-			...item,
-		}).unwrap();
 
-		setIsAdded(true);
+		if (data && data.user) {
+			addItem({
+				...item,
+				isAdded: true,
+				amount: 1,
+			}).unwrap()
+			.then((data) => {
+				setAdded(true);
+				setDisabled(true);
+			})
+			.catch((err) => setNotAdded(true));
+			
+			return;
+		}
+		
+		setIsUser(true);
 	}
 
   return (
 		<Grid item xs={10} sm={6} md={4} xl={3}>
  			<StyledCard >
-				<CardHeader	title={title} subheader={`${price}$`}	/>
+				<CardHeader color='inherit'	title={title} subheader={`${price}$`}	/>
 				<Swiper
 					cssMode={true}
 					navigation={true}
@@ -92,7 +106,6 @@ export const ProductItem: React.FC<IProducts> = (item) => {
 					
 				</Swiper>
 
-
 				<CardContent>
 					<RatingWrap>
 						<Rating name="item-rating" value={rating} readOnly />
@@ -103,15 +116,18 @@ export const ProductItem: React.FC<IProducts> = (item) => {
 						</Typography>
 					</RatingWrap>
 				</CardContent>
-				<CardActions disableSpacing sx={{justifyContent: 'space-between'}}>
 
-					<Tooltip title={ isAdded ? 'This Item Has Already Added!' : 'Add To Cart!'}>
-						<IconButton
-							onClick={handleAddItem}
-							aria-label="add to favorites">
-							<AddShoppingCartIcon fontSize='large' />
-						</IconButton>
+				<CardActions disableSpacing sx={{justifyContent: 'space-between'}}>
+					
+				<IconButton
+					disabled={disabled}
+					onClick={handleAddItem}
+					aria-label="add to favorites">
+
+					<Tooltip title={ disabled ? 'This Item Has Already Added!' : 'Add To Cart!'}>
+						<AddShoppingCartIcon fontSize='large' />
 					</Tooltip>
+				</IconButton>
 
 					<IconButton
 						sx={{
@@ -137,16 +153,26 @@ export const ProductItem: React.FC<IProducts> = (item) => {
 				</Collapse>
 			</StyledCard>
 
-			<Snackbar open={isAdded} autoHideDuration={4000} onClose={() => setIsAdded(false)}>
+			<Snackbar open={added} autoHideDuration={4000} onClose={() => setAdded(false)}>
 				<Alert
 					severity="success"
 					sx={{minWidth: '200px', textTransform: 'capitalize'}} 
-					onClose={() => setIsAdded(false)} >
+					onClose={() => setAdded(false)} >
 					item has been added in your cart!
 				</Alert>
       </Snackbar>
+
+			<Snackbar open={notAdded} autoHideDuration={4000} onClose={() => setNotAdded(false)}>
+				<Alert
+					severity="error"
+					sx={{minWidth: '200px', textTransform: 'capitalize'}} 
+					onClose={() => setNotAdded(false)} >
+					this item has already been added in your cart!
+				</Alert>
+      </Snackbar>
+
+			<SignAlert open={isUser} onclose={() => {setIsUser(false)}} />
 		</Grid>
-   
   );
 }
 

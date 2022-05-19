@@ -9,7 +9,7 @@ interface Props {};
 const Content: React.FC = ({}: Props) => {
 
 	const [ text, setText ] = useState<string>('');
-	const { data, isLoading } = useGetProductsQuery(text);
+	const { data, isSuccess } = useGetProductsQuery(text);
 	const changeUrl: (txt: string) => void = (txt) => setText(txt);
 
 	return (
@@ -18,7 +18,7 @@ const Content: React.FC = ({}: Props) => {
 				<ContentSearch onsubmit={changeUrl} />
 				<Filter onchange={changeUrl} />
 			</WrapperTop>
-			<ProductsList data={ data } isLoading={ isLoading } />
+			<ProductsList data={ data } isLoading={ isSuccess } />
 		</>
 	)
 };

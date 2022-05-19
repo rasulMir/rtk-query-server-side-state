@@ -50,6 +50,9 @@ export default function Filter({ onchange }: Props) {
           'aria-labelledby': 'filter',
         }}
       >
+				<MenuItem onClick={() => handleClose('')}>
+					All
+				</MenuItem>
 				{
 					categories.map((i, idx) => (
 						<MenuItem key={idx}

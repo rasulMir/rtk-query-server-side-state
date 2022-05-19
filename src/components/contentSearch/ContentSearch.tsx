@@ -29,7 +29,7 @@ export default function ContentSearch({ onsubmit }: Props) {
 				<StyledInputBase
 					value={txt}
 					onChange={handleChange}
-					placeholder="Search By Title…"
+					placeholder="Search..."
 					inputProps={{ 'aria-label': 'search' }}
 				/>
 			</Search>

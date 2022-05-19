@@ -4,12 +4,13 @@ import Badge from '@mui/material/Badge';
 import { IconButton, Tooltip } from '@mui/material';
 import { useGetOrdersQuery } from '../../features/ecomm/storeApi';
 
+
 interface Props {};
 
 export default function UserCart({}: Props) {
 
 	const { data } = useGetOrdersQuery();
-
+	
 	return (
 		<Tooltip title='Your Cart'>
 			<IconButton color='inherit'>

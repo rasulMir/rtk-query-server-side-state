@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { IconButton, Menu, MenuItem } from '@mui/material';
+import { IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
+import { StyledDiv } from './HeaderUser.styled';
 
-interface Props {}
+interface Props {
+	name: string,
+}
 
-export default function HeaderUser({}: Props) {
+export default function HeaderUser({ name }: Props) {
 
   const [auth, setAuth] = useState(true);
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -22,7 +25,8 @@ export default function HeaderUser({}: Props) {
   };
 
 	return (
-		<div>
+		<StyledDiv >
+			<Typography variant='h6' component='span'>{ name }</Typography>
 			<IconButton
 				size="large"
 				aria-label="account of current user"
@@ -54,6 +58,6 @@ export default function HeaderUser({}: Props) {
 				<MenuItem onClick={handleClose}>Profile</MenuItem>
 				<MenuItem onClick={handleClose}>My account</MenuItem>
 			</Menu>
-		</div>
+		</StyledDiv>
 	)
 }

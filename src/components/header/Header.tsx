@@ -4,8 +4,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import HeaderUser from '../headerUser/HeaderUser';
 import UserCart from '../userCart/UserCart';
+import { useGetCurrentUserQuery } from '../../features/ecomm/storeApi';
+import SignLinks from '../signLinks/SignLinks';
 
 const Header: React.FC = () => {
+
+	const { data } = useGetCurrentUserQuery();
+
 	return(
 		<StyledAppBar position='sticky'>
 			<Toolbar>
@@ -19,9 +24,14 @@ const Header: React.FC = () => {
 						</Link>
 					</StyledLogo>
 
-					<UserCart />
-
-					<HeaderUser />
+					{
+						data && data.user ?
+							<>
+								<UserCart />
+								<HeaderUser name={data.user.name} />
+							</> : <SignLinks />
+					}
+					
 
 				</StyledContainer>
 			</Toolbar>

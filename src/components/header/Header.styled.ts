@@ -10,6 +10,7 @@ export const StyledAppBar = styled(AppBar)`
 	background: #009688;
 `;
 
+
 export const StyledLogo = styled(Typography)`
 	text-transform: uppercase;
 	flex: 1 0;

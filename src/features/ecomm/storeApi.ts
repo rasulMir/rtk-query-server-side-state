@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { ICartItem, IProducts, IUser } from '../../types';
+import type { ICartItem, IProducts, IUser, ICurrentUser } from '../../types';
 
 export const storeApi = createApi({
   reducerPath: 'storeApi',
@@ -58,6 +58,17 @@ export const storeApi = createApi({
 			invalidatesTags: [{ type: 'Users' }]
 		}),
 
+		getCurrentUser: builder.query<ICurrentUser | false, void>({
+			query: () => 'currentUser',
+			// providesTags: (result) =>
+      //   result
+      //     ? [
+      //         ...result.map(() => ({ type: 'Current' as const})),
+      //         { type: 'Current'},
+      //       ]
+      //     : [{ type: 'Current' }],
+		}),
+
 		addCurrentUser: builder.mutation<IUser, IUser | false>({
 			query: (currUser: IUser) => ({
 				url: 'currentUser',
@@ -74,4 +85,4 @@ export const storeApi = createApi({
 });
 
 export const { useGetUAllsersQuery, useAddNewUserMutation, useAddCurrentUserMutation, useGetProductsQuery, useAddToCartMutation,
-useGetOrdersQuery } = storeApi;
+useGetOrdersQuery, useGetCurrentUserQuery } = storeApi;

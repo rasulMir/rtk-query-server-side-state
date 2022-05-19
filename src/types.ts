@@ -27,6 +27,10 @@ export interface IProducts {
 	images: string[]
 };
 
+export interface ICurrentUser {
+	user: IUser | false,
+}
+
 export interface ICartItem extends IProducts {
 	amount: number,
 	isAdded: boolean,
