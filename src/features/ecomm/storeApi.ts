@@ -4,7 +4,7 @@ import type { ICartItem, IProducts, IUser, ICurrentUser } from '../../types';
 export const storeApi = createApi({
   reducerPath: 'storeApi',
 	tagTypes: ['Users', 'Cart', 'Orders', 'Current', 'Products'],
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3001/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   endpoints: (builder) => ({
     getUAllsers: builder.query<IUser[], void>({
       query: () => `users/`,
