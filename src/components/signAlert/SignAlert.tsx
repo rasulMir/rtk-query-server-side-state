@@ -8,6 +8,7 @@ interface Props {
 }
 
 export default function SignAlert({ open, onclose }: Props) {
+
 	return (
 		<Dialog
 			fullWidth={false}
@@ -19,6 +20,7 @@ export default function SignAlert({ open, onclose }: Props) {
 			</DialogTitle>
 
 			<DialogActions>
+
 				<SignLinks />
 			</DialogActions>
 		</Dialog>
